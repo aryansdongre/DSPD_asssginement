@@ -10,8 +10,8 @@ typedef struct checkinQueue{
     checkinNode *front;
     checkinNode *rear;
 }checkinQueue;
-void initialse(checkinQueue* qptr);
-int isEmpty(checkinQueue* qptr);
-void insert(checkinQueue* qptr,passenger* pptr);
-passenger* dequeue(checkinQueue* qptr);
+void initialseCheckinQueue(checkinQueue* qptr);
+int isEmptyCheckinQueue(checkinQueue* qptr);
+void insertCheckinQueue(checkinQueue* qptr,passenger* pptr);
+passenger* dequeueCheckinQueue(checkinQueue* qptr);
 #endif

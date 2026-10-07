@@ -210,3 +210,39 @@ status_code addFlight(flight** head,flight* flptr)
     }
     return sc;
 }
+status_code deleteFlight(flight**fhead,int flightId,passenger* phead)
+{
+    status_code sc=FAILURE;
+    flight* fptr=searchById(*fhead,flightId);
+    if(fptr!=NULL)
+    {
+        passenger* nptr=phead;
+        int found=0;
+        while(nptr!=NULL&&!found)
+        {
+            if(nptr->flightId==flightId)
+            {
+                found=1;
+            }
+            nptr=nptr->next;
+        }
+        if(!found)
+        {
+            if(fptr->prev!=NULL)
+            {
+                fptr->prev->next=fptr->next;
+            }
+            else
+            {
+                *fhead=fptr->next;
+            }
+            if(fptr->next!=NULL)
+            {
+                fptr->next->prev=fptr->prev;
+            }
+            free(fptr);
+            sc=SUCCESS;
+        }
+    }
+    return sc;
+}

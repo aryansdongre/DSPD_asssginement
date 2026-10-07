@@ -16,8 +16,8 @@ typedef struct priorityBoardingQueue
 {
     boardingQueue arr[3];
 }priorityBoardingQueue;
-void initialise(priorityBoardingQueue *qptr);
-int  isEmpty(priorityBoardingQueue *qptr);
-void  insert(priorityBoardingQueue *qptr, passenger *pptr);
-passenger* dequeue(priorityBoardingQueue *q);//passenger* returned and not boardingNode* similar to how we do in normal queue ie return int and not node* because it gets freed inside function dequeue
+void initialiseBoardingQueue(priorityBoardingQueue *qptr);
+int  isEmptyBoardingQueue(priorityBoardingQueue *qptr);
+void  insertBoardingQueue(priorityBoardingQueue *qptr, passenger *pptr);
+passenger* dequeueBoardingQueue(priorityBoardingQueue *q);//passenger* returned and not boardingNode* similar to how we do in normal queue ie return int and not node* because it gets freed inside function dequeue
 #endif

@@ -6,4 +6,5 @@
 #include "boarding_queue.h"
 #include "checkin_queue.h"
 #include "boarding_history.h"
+#include "common_operations.h"
 #endif

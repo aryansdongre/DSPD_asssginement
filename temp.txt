@@ -1,2 +1,3 @@
 1)in flight.h function display acts on search by id,source,destination
 2)in displaySortedBySource and other such functions creating an array of flight* and then sorting it so that sorting becomes easier and original flight linked list is not affected
+3)common_operations.h contains functions which contain two differnent derived types
