@@ -16,4 +16,7 @@ typedef struct passenger{
 }passenger;
 passenger* searchPassengerById(passenger* head,int passengerId);
 int isSeatTaken(passenger *phead, int flightId, int seat);
+int countPassengers(passenger* phead,int flightId);
+int countFirstClassPassengers(passenger* phead,int flightId);
+int countSeniorCitizens(passenger* phead,int flightId);
 #endif

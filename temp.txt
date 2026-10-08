@@ -1,3 +1,7 @@
 1)in flight.h function display acts on search by id,source,destination
 2)in displaySortedBySource and other such functions creating an array of flight* and then sorting it so that sorting becomes easier and original flight linked list is not affected
 3)common_operations.h contains functions which contain two differnent derived types
+4)status of flight and passemger not taken as input but it is updated when a particular function which changes it is called
+5)assuming add passenger happens at the time of booking the flight
+6)checkin depends on who arrives first at the airport
+7)for cancel a flight deleting the node

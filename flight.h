@@ -18,4 +18,8 @@ void displaySortedByDepartureTime(flight* head);
 void displaySortedBySource(flight* head);
 void displaySortedByDestination(flight* head);
 void displaySortedBySourceThenByDepartureTime(flight* head);
+void displayMostCrowdedFlight(flight* head);
+void displayFlightWithHighestOccupancyPercentage(flight*head);
+void displayFlightWithHighestSeniorPassengerPercentage(flight* head);
+void displayFlightWithMaxAvailableSeats(flight* head);
 #endif

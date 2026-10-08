@@ -66,7 +66,7 @@ void display(flight *fptr)
 void displaySortedByDepartureTime(flight *head)
 {
     flight *fptr = head;
-    if(fptr==NULL)
+    if (fptr == NULL)
     {
         printf("No flights\n");
     }
@@ -161,12 +161,12 @@ void displaySortedBySourceThenByDepartureTime(flight *head)
     {
         for (int j = 0; j < n - i - 1; j++)
         {
-            int c=strcmp(arr[j]->source, arr[j + 1]->source);
-            if(c==0)//ie if same source change the comparison to departure time
+            int c = strcmp(arr[j]->source, arr[j + 1]->source);
+            if (c == 0) // ie if same source change the comparison to departure time
             {
-                c=strcmp(arr[j]->departureTime, arr[j + 1]->departureTime);
+                c = strcmp(arr[j]->departureTime, arr[j + 1]->departureTime);
             }
-            if(c > 0)
+            if (c > 0)
             {
                 flight *tptr = arr[j];
                 arr[j] = arr[j + 1];
@@ -180,69 +180,192 @@ void displaySortedBySourceThenByDepartureTime(flight *head)
     }
     free(arr);
 }
-status_code addFlight(flight** head,flight* flptr)
+status_code addFlight(flight **head, flight *flptr)
 {
-    status_code sc=SUCCESS;
-    if(searchById(*head,flptr->flightId)!=NULL)
+    status_code sc = SUCCESS;
+    if (searchById(*head, flptr->flightId) != NULL)
     {
-        sc=FAILURE;
-    }
-    flight* curr_ptr=*head;
-    flight* prev_ptr=NULL;
-    while(curr_ptr!=NULL&&strcmp(curr_ptr->departureTime,flptr->departureTime)<=0)
-    {
-        prev_ptr=curr_ptr;
-        curr_ptr=curr_ptr->next;
-    }
-    flptr->prev=prev_ptr;
-    flptr->next=curr_ptr;
-    if(prev_ptr==NULL)
-    {
-        *head=flptr;
+        sc = FAILURE;
     }
     else
     {
-        prev_ptr->next=flptr;
-    }
-    if(curr_ptr!=NULL)
-    {
-        curr_ptr->prev=flptr;
+        flptr->availableSeats=flptr->totalSeats;
+        flptr->status=SCHEDULED;
+        flight *curr_ptr = *head;
+        flight *prev_ptr = NULL;
+        while (curr_ptr != NULL && strcmp(curr_ptr->departureTime, flptr->departureTime) <= 0)
+        {
+            prev_ptr = curr_ptr;
+            curr_ptr = curr_ptr->next;
+        }
+        flptr->prev = prev_ptr;
+        flptr->next = curr_ptr;
+        if (prev_ptr == NULL)
+        {
+            *head = flptr;
+        }
+        else
+        {
+            prev_ptr->next = flptr;
+        }
+        if (curr_ptr != NULL)
+        {
+            curr_ptr->prev = flptr;
+        }
     }
     return sc;
 }
-status_code deleteFlight(flight**fhead,int flightId,passenger* phead)
+status_code deleteFlight(flight **fhead, int flightId, passenger *phead)
+
 {
-    status_code sc=FAILURE;
-    flight* fptr=searchById(*fhead,flightId);
-    if(fptr!=NULL)
+    status_code sc = FAILURE;
+    flight *fptr = searchById(*fhead, flightId);
+    if (fptr != NULL)
     {
-        passenger* nptr=phead;
-        int found=0;
-        while(nptr!=NULL&&!found)
+        passenger *nptr = phead;
+        int found = 0;
+        while (nptr != NULL && !found)
         {
-            if(nptr->flightId==flightId)
+            if (nptr->flightId == flightId)
             {
-                found=1;
+                found = 1;
             }
-            nptr=nptr->next;
+            nptr = nptr->next;
         }
-        if(!found)
+        if (!found)
         {
-            if(fptr->prev!=NULL)
+            if (fptr->prev != NULL)
             {
-                fptr->prev->next=fptr->next;
+                fptr->prev->next = fptr->next;
             }
             else
             {
-                *fhead=fptr->next;
+                *fhead = fptr->next;
             }
-            if(fptr->next!=NULL)
+            if (fptr->next != NULL)
             {
-                fptr->next->prev=fptr->prev;
+                fptr->next->prev = fptr->prev;
             }
             free(fptr);
-            sc=SUCCESS;
+            sc = SUCCESS;
         }
     }
     return sc;
+}
+void displayMostCrowdedFlight(flight* head)
+{
+    flight* fptr=head;
+    flight* ans_ptr=head;
+    int max=0;
+    while(fptr!=NULL)
+    {
+        int occupied=(fptr->totalSeats-fptr->availableSeats);
+        if(occupied>max)
+        {
+            max=occupied;
+            ans_ptr=fptr;
+        }
+        fptr=fptr->next;
+    }
+    display(ans_ptr);
+}
+void displayFlightWithHighestOccupancyPercentage(flight*head)
+{
+    flight* fptr=head;
+    flight* ans_ptr=head;
+    float percentage;
+    float max_percent=0.0;
+    while(fptr!=NULL)
+    {
+        int occupied=(fptr->totalSeats-fptr->availableSeats);
+        percentage=(occupied*100)/(float)fptr->totalSeats;
+        if(percentage>max_percent)
+        {
+            max_percent=percentage;
+            ans_ptr=fptr;
+        }
+        fptr=fptr->next;
+    }
+    display(ans_ptr);
+}
+void displayMostPopularDestination(flight* fhead,passenger* phead)
+{
+    int mx_passengers=0;
+    flight* best=NULL;
+    for(flight* fptr=fhead;fptr!=NULL;fptr=fptr->next)
+    {
+        int passengers=0;
+        for(flight* nptr=fhead;nptr!=NULL;nptr=nptr->next)
+        {
+            if(strcmp(fptr->destination,nptr->destination)==0)
+            {
+                passengers+=countPassengers(phead,nptr->flightId);
+            }
+        }
+        if(passengers>mx_passengers)
+        {
+            mx_passengers=passengers;
+            best=fptr;
+        }
+    }
+    if(best==NULL)
+    {
+        printf("No passengers\n");
+    }
+    else
+    {
+        printf("Most popular destination is:%s",best->destination);
+    }
+}
+void displayDestinationWithMostFirstClassPassengers(flight* fhead,passenger* phead)
+{
+    int mx_passengers=0;
+    flight* best=NULL;
+    for(flight* fptr=fhead;fptr!=NULL;fptr=fptr->next)
+    {
+        int passengers=0;
+        for(flight* nptr=fhead;nptr!=NULL;nptr=nptr->next)
+        {
+            if(strcmp(fptr->destination,nptr->destination)==0)
+            {
+                passengers+=countFirstClassPassengers(phead,nptr->flightId);
+            }
+        }
+        if(passengers>mx_passengers)
+        {
+            mx_passengers=passengers;
+            best=fptr;
+        }
+    }
+    if(best==NULL)
+    {
+        printf("No passengers\n");
+    }
+    else
+    {
+        printf("Most popular destination for people in first class is:%s\n",best->destination);
+    }
+}
+void displayFlightWithMostSeniorCitizens(flight* fhead,passenger* phead)
+{
+    float max_percent=0.0;
+    flight* nptr=NULL;
+    for(flight* fptr=fhead;fptr!=NULL;fptr=fptr->next)
+    {
+        int total=countPassengers(phead,fptr->flightId);
+        int seniorCitizens=countSeniorCitizens(phead,fptr->flightId);
+        if(seniorCitizens!=0&&(seniorCitizens * 100.0f) / total>max_percent)
+        {
+            nptr=fptr;
+            max_percent=(seniorCitizens * 100.0f) / total;
+        }
+    }
+    if(nptr==NULL)
+    {
+        printf("No flight with Senior citizens\n");
+    }
+    else
+    {
+        display(nptr);
+    }
 }

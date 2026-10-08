@@ -91,3 +91,45 @@ status_code deletePassenger(passenger **phead, int passengerId, flight *fhead)
     }
     return sc;
 }
+int countPassengers(passenger* phead,int flightId)
+{
+    int count=0;
+    passenger* pptr=phead;
+    while(pptr!=NULL)
+    {
+        if(pptr->flightId==flightId)
+        {
+            count++;
+        }
+        pptr=pptr->next;
+    }
+    return count;
+}
+int countFirstClassPassengers(passenger* phead,int flightId)
+{
+    int count=0;
+    passenger* pptr=phead;
+    while(pptr!=NULL)
+    {
+        if(pptr->flightId==flightId&&pptr->ticketType==FIRST_CLASS)
+        {
+            count++;
+        }
+        pptr=pptr->next;
+    }
+    return count;
+}
+int countSeniorCitizens(passenger* phead,int flightId)
+{
+    int count=0;
+    passenger* pptr=phead;
+    while(pptr!=NULL)
+    {
+        if(pptr->flightId==flightId&&pptr->age>=60)
+        {
+            count++;
+        }
+        pptr=pptr->next;
+    }
+    return count;
+}
